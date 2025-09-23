@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Products - Clean Architecture</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Product Catalog</h1>
+            <p class="text-sm text-gray-600">Built with Clean Architecture & Domain-Driven Design</p>
+            <div class="mt-4 text-xs text-gray-500 space-y-1">
+                <p><strong>Architecture:</strong> Domain → Application → Infrastructure → Presentation</p>
+                <p><strong>Patterns:</strong> Repository, Dependency Injection, Value Objects</p>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-6">
+            <div class="flex items-center space-x-4">
+                <input type="text" placeholder="Search products..."
+                    class="flex-1 max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    hx-get="/htmx/products" hx-trigger="keyup changed delay:300ms" hx-target="#product-list"
+                    name="search">
+                <span class="text-sm text-gray-500">Real-time search with HTMX</span>
+            </div>
+        </div>
+
+        <!-- Add Product Form -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Add New Product</h2>
+            <form hx-post="/htmx/products" hx-target="#product-list" hx-swap="afterbegin"
+                class="grid grid-cols-1 md:grid-cols-4 gap-4" hx-on::after-request="this.reset()">
+                <input type="text" name="name" placeholder="Product Name" required
+                    class="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                <input type="text" name="description" placeholder="Description"
+                    class="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                <input type="number" name="price" step="0.01" placeholder="Price" required
+                    class="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                <div class="flex gap-2">
+                    <input type="number" name="stock" placeholder="Stock" required
+                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                    <button type="submit"
+                        class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                        Add
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {{PRODUCT_CARDS}}
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-12 text-center text-sm text-gray-500">
+            <p>Clean Architecture Demo - Rust + Axum + HTMX + SQLite</p>
+            <div class="mt-2 space-x-4">
+                <a href="/api/products" class="text-blue-600 hover:text-blue-800">API Docs</a>
+                <a href="/health" class="text-blue-600 hover:text-blue-800">Health Check</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
